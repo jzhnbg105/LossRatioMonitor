@@ -1,4 +1,4 @@
-## Welcome to GitHub Pages
+## Welcome to Loss Ratio Monitor
 
 You can use the [editor on GitHub](https://github.com/jzhnbg105/LossRatioMonitor/edit/master/README.md) to maintain and preview the content for your website in Markdown files.
 
