@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <title>google maps: draw chart into infoWindow</title>
+  <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="googlebot" content="noindex, nofollow">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  <script
+    type="text/javascript"
+    src="/js/lib/dummy.js"
+    
+  ></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/result-light.css">
+
+      <script type="text/javascript" src="https://www.google.com/jsapi?.js"></script>
+      <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.10&amp;sensor=false&amp;.js"></script>
+  <style id="compiled-css" type="text/css">
+      
+  </style>
+
+
+  
+</head>
+<body onload="initialize()">
+    <div id="map_canvas" style="height:800px;"></div>
+
+  <!-- TODO: Missing CoffeeScript 2 -->
+
+  <script type="text/javascript">
+
+    
+function drawChart(marker, lat, lng) {
+    var LoB = '"AB_Dis"';
+	var queryString = encodeURIComponent('SELECT A, B WHERE D =' + lat.toFixed(4) + 'AND E =' + lng.toFixed(4) +' AND C = ' + LoB);
+    var query = new google.visualization.Query('https://docs.google.com/spreadsheets/d/1M_7Gi974RrNLv0lYaDXARlxBiyz8cOoVxfzsrUOMjG0/gviz/tq?gid=0&headers=1&tq='+ queryString);
+    query.send(function handleQueryResponse(response) {
+    if (response.isError()) {
+    alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+    return;
+	}
+
+    var data = response.getDataTable();
+  
+	var options = {'title':'Loss Ratio @ '+ marker.getPosition().toString(),
+                 'width':400,
+                 'height':100};
+  
+	var node        = document.createElement('div'),
+		infoWindow  = new google.maps.InfoWindow(),
+		chart       = new google.visualization.LineChart(node);
+            
+	chart.draw(data, options);
+	infoWindow.setContent(node);
+	infoWindow.open(marker.getMap(),marker);
+	}       ); 
+		
+        // Create the data table.
+    }     
+
+function initialize() {
+    
+	 
+	var LatLng1 = {lat: 51.2538, lng: -85.3232};
+	var LatLng2 = {lat: 56.4532, lng: -115.2981};
+    //alert(LatLng1.lat)
+    var mapOptions = {
+      center: new google.maps.LatLng(LatLng1),
+      zoom: 5,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    
+    var map = new google.maps.Map(document.getElementById("map_canvas"),
+        mapOptions);
+
+    var marker1 = new google.maps.Marker({
+        position: LatLng1,
+        map: map
+    });
+	
+	var marker2 = new google.maps.Marker({
+        position: LatLng2,
+        map: map
+    });
+    
+    google.maps.event.addListener(marker1, 'click', function() {
+      drawChart(marker1, LatLng1.lat, LatLng1.lng);
+    });
+	
+	google.maps.event.addListener(marker2, 'click', function() {
+      drawChart(marker2, LatLng2.lat, LatLng2.lng);
+    });
+         
+  } 
+google.load('visualization', '1.0', {'packages':['corechart']});
+google.setOnLoadCallback(drawChart);
+
+</script>
+
+</body>
+</html>
