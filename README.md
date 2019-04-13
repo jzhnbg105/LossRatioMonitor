@@ -9,4 +9,4 @@ Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://j
 ```markdown
 
 #Upload data to google sheet
-#Chart data on google map will automatically update when upon refreshing the webpage
+#Chart data on google map will automatically update upon refreshing the webpage
